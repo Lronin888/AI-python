@@ -50,8 +50,6 @@ def AI_V3(data,ipadd):
       4.需要注意，华为和华三的命令几乎一致，如分辨不出来具体设备厂商可以忽略
       明白你的身份后，回复1
   '''
-
-  # 发送带有流式输出的请求
   stream = client.chat.completions.create(
       # 指定您创建的方舟推理接入点 ID，此处已帮您修改为您的推理接入点 ID
       model="ep-m-20250228165213-cct67",
@@ -59,7 +57,6 @@ def AI_V3(data,ipadd):
           {"role": "system", "content": prompt},
           {"role": "user", "content": data},
       ],
-      # 响应内容是否流式返回
       stream=True,
   )
   filename = f'{dir_url}\%s' % ipadd + '.md'
@@ -85,8 +82,6 @@ def local_ollama(data,ipadd):
       5.必须使用中文回答问题，如果用户给出的命令是英文则翻译为中文进行回答
       明白你的身份后，回复1
   '''
-
-    # 创建生成器流
     response_stream = client.generate(
         model='qwen:1.8b',
         system=text,
@@ -94,16 +89,14 @@ def local_ollama(data,ipadd):
         options={
             'temperature': 1,
         },
-        stream=True  # 关键参数：启用流式模式
+        stream=True  
     )
-    # 实时输出处理
     try:
         filename = f'{dir_url}\%s' % ipadd + '.md'
         for chunk in response_stream:
-            # 打印当前片段内容
             print(chunk['response'], end='',flush=True,
             file=open(f'{filename}', 'a'))
-            time.sleep(0.02)  # 控制输出节奏（可选）
+            time.sleep(0.02)
         return filename
     except KeyboardInterrupt:
         print("\n用户中断了生成")
