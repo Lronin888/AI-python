@@ -129,22 +129,17 @@ def inspect_device(ip_address):
     except Exception as e:
         print(f"{ip_address} 连接失败：{str(e)}")
         return None
-def main():
-    dir_url = r"D:\server"
-    load_dotenv(r'D:\server\.env')
-    devices = [f'192.168.10.{ip}' for ip in range(32, 34)]
-    port=os.getenv("PORT")
-    user=os.getenv("USER")
-    passwd=os.getenv("PASSWORD")
-    api_key=os.getenv("HS_API_KEY")
 
+def main():
+    dir_url = r"D:\AI+python\巡检报告"
+    devices = [f'192.168.56.{sw}' for sw in range(10, 14)]
     for ip in devices:
         print(f"\n开始巡检设备 {ip}")
-        report_file = inspect_server(ip,user,passwd,port)
-        time.sleep(1)
+        report_file = inspect_device(ip)
+        time.sleep(2)
         with open(f'{report_file}','r') as f:
             check_file = f.read()
-            Report = AI_V3(check_file, ip,api_key)
+            Report = AI_V3(check_file, ip)
             #Report = local_ollama(check_file, ip)
             time.sleep(2)
             if report_file:
