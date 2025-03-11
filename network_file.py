@@ -68,7 +68,7 @@ def AI_V3(data,ipadd):
 #调用本地大模型处理
 def local_ollama(data,ipadd):
     ''' 
-    本地模型最好使用32B或以上，32B以下模型不适用
+    本地模型最好使用32B或以上，32B以下模型效果较差
     '''
     client = Client(host='http://localhost:11434')
     text= '''
@@ -129,21 +129,28 @@ def inspect_device(ip_address):
     except Exception as e:
         print(f"{ip_address} 连接失败：{str(e)}")
         return None
+def main():
+    dir_url = r"D:\server"
+    load_dotenv(r'D:\server\.env')
+    devices = [f'192.168.10.{ip}' for ip in range(32, 34)]
+    port=os.getenv("PORT")
+    user=os.getenv("USER")
+    passwd=os.getenv("PASSWORD")
+    api_key=os.getenv("HS_API_KEY")
 
-
-if __name__ == '__main__':
-    dir_url = r"D:\AI+python\巡检报告"
-    devices = [f'192.168.56.{sw}' for sw in range(10, 14)]
     for ip in devices:
         print(f"\n开始巡检设备 {ip}")
-        report_file = inspect_device(ip)
-        time.sleep(2)
+        report_file = inspect_server(ip,user,passwd,port)
+        time.sleep(1)
         with open(f'{report_file}','r') as f:
             check_file = f.read()
-            Report = AI_V3(check_file, ip)
+            Report = AI_V3(check_file, ip,api_key)
             #Report = local_ollama(check_file, ip)
             time.sleep(2)
             if report_file:
                 print(f"巡检报告已生成：{Report}")
         os.remove(report_file)
         print("-"*60)
+
+if __name__ == '__main__':
+    main()
