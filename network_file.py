@@ -130,6 +130,7 @@ def inspect_device(ip_address):
         return None
 
 def main():
+    global dir_url
     dir_url = r"D:\AI+python\巡检报告"
     devices = [f'192.168.56.{sw}' for sw in range(10, 14)]
     for ip in devices:
