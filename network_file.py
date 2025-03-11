@@ -49,7 +49,6 @@ def AI_V3(data,ipadd):
       明白你的身份后，回复1
   '''
   stream = client.chat.completions.create(
-      # 指定您创建的方舟推理接入点 ID，此处已帮您修改为您的推理接入点 ID
       model="ep-m-20250228165213-cct67",
       messages=[
           {"role": "system", "content": prompt},
